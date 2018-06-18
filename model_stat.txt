@@ -1,0 +1,109 @@
+model = Sequential()
+
+model.add(Conv2D(filters = 64, kernel_size = (3, 3), activation='relu',
+                 input_shape = (48, 48, 1)))
+model.add(BatchNormalization())
+model.add(Conv2D(filters = 64, kernel_size = (3, 3), activation='relu'))
+model.add(BatchNormalization())
+model.add(MaxPool2D(strides=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Conv2D(filters = 64, kernel_size = (3, 3), activation='relu'))
+model.add(BatchNormalization())
+model.add(Conv2D(filters = 64, kernel_size = (3, 3), activation='relu'))
+model.add(BatchNormalization())
+model.add(MaxPool2D(strides=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Permute((3, 2, 1)))
+model.add(Reshape((64, 81)))
+model.add(LSTM(256, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Reshape((128, 2)))
+model.add(Flatten())
+model.add(Dense(7, activation='softmax'))
+
+
+Epoch 1/20
+500/500 [==============================] - 742s 1s/step - loss: 1.8241 - acc: 0.2542 - val_loss: 1.6952 - val_acc: 0.3375
+Epoch 2/20
+500/500 [==============================] - 735s 1s/step - loss: 1.7196 - acc: 0.3028 - val_loss: 1.7646 - val_acc: 0.3275
+Epoch 3/20
+500/500 [==============================] - 746s 1s/step - loss: 1.6701 - acc: 0.3412 - val_loss: 1.6557 - val_acc: 0.3475
+Epoch 4/20
+500/500 [==============================] - 716s 1s/step - loss: 1.6128 - acc: 0.3639 - val_loss: 1.5729 - val_acc: 0.4000
+Epoch 5/20
+500/500 [==============================] - 724s 1s/step - loss: 1.5681 - acc: 0.3878 - val_loss: 1.4605 - val_acc: 0.4425
+Epoch 6/20
+500/500 [==============================] - 759s 2s/step - loss: 1.5427 - acc: 0.4005 - val_loss: 1.3864 - val_acc: 0.4525
+Epoch 7/20
+500/500 [==============================] - 783s 2s/step - loss: 1.5087 - acc: 0.4108 - val_loss: 1.3632 - val_acc: 0.4900
+Epoch 8/20
+500/500 [==============================] - 814s 2s/step - loss: 1.4884 - acc: 0.4212 - val_loss: 1.3225 - val_acc: 0.4975
+Epoch 9/20
+500/500 [==============================] - 738s 1s/step - loss: 1.4622 - acc: 0.4300 - val_loss: 1.3497 - val_acc: 0.4800
+Epoch 10/20
+500/500 [==============================] - 771s 2s/step - loss: 1.4374 - acc: 0.4503 - val_loss: 1.2744 - val_acc: 0.5175
+Epoch 11/20
+500/500 [==============================] - 769s 2s/step - loss: 1.3914 - acc: 0.4606 - val_loss: 1.2779 - val_acc: 0.5350
+Epoch 12/20
+500/500 [==============================] - 747s 1s/step - loss: 1.3868 - acc: 0.4671 - val_loss: 1.2541 - val_acc: 0.5425
+Epoch 13/20
+500/500 [==============================] - 744s 1s/step - loss: 1.3751 - acc: 0.4664 - val_loss: 1.2290 - val_acc: 0.5750
+Epoch 14/20
+500/500 [==============================] - 792s 2s/step - loss: 1.3591 - acc: 0.4779 - val_loss: 1.2368 - val_acc: 0.5500
+Epoch 15/20
+500/500 [==============================] - 719s 1s/step - loss: 1.3525 - acc: 0.4790 - val_loss: 1.2110 - val_acc: 0.5675
+Epoch 16/20
+500/500 [==============================] - 720s 1s/step - loss: 1.3580 - acc: 0.4724 - val_loss: 1.2104 - val_acc: 0.5650
+Epoch 17/20
+500/500 [==============================] - 726s 1s/step - loss: 1.3292 - acc: 0.4925 - val_loss: 1.1760 - val_acc: 0.5725
+Epoch 18/20
+500/500 [==============================] - 737s 1s/step - loss: 1.3301 - acc: 0.4876 - val_loss: 1.2001 - val_acc: 0.5550
+Epoch 19/20
+500/500 [==============================] - 716s 1s/step - loss: 1.3104 - acc: 0.4966 - val_loss: 1.1833 - val_acc: 0.5400
+Epoch 20/20
+500/500 [==============================] - 687s 1s/step - loss: 1.3107 - acc: 0.4901 - val_loss: 1.1705 - val_acc: 0.5825
+
+------------------------------------------------
+
+Epoch 21/40
+500/500 [==============================] - 731s 1s/step - loss: 1.2881 - acc: 0.5018 - val_loss: 1.1696 - val_acc: 0.5975
+Epoch 22/40
+500/500 [==============================] - 736s 1s/step - loss: 1.2911 - acc: 0.5024 - val_loss: 1.1683 - val_acc: 0.5850
+Epoch 23/40
+500/500 [==============================] - 748s 1s/step - loss: 1.2942 - acc: 0.5030 - val_loss: 1.1738 - val_acc: 0.5775
+Epoch 24/40
+500/500 [==============================] - 725s 1s/step - loss: 1.2839 - acc: 0.5088 - val_loss: 1.1568 - val_acc: 0.5950
+Epoch 25/40
+500/500 [==============================] - 705s 1s/step - loss: 1.2815 - acc: 0.5088 - val_loss: 1.1614 - val_acc: 0.5900
+Epoch 26/40
+500/500 [==============================] - 711s 1s/step - loss: 1.2871 - acc: 0.5054 - val_loss: 1.1535 - val_acc: 0.5975
+Epoch 27/40
+500/500 [==============================] - 707s 1s/step - loss: 1.2705 - acc: 0.5098 - val_loss: 1.1504 - val_acc: 0.6000
+Epoch 28/40
+500/500 [==============================] - 710s 1s/step - loss: 1.2536 - acc: 0.5153 - val_loss: 1.1514 - val_acc: 0.5900
+Epoch 29/40
+500/500 [==============================] - 706s 1s/step - loss: 1.2750 - acc: 0.5110 - val_loss: 1.1500 - val_acc: 0.6000
+Epoch 30/40
+500/500 [==============================] - 704s 1s/step - loss: 1.2528 - acc: 0.5164 - val_loss: 1.1449 - val_acc: 0.5900
+Epoch 31/40
+500/500 [==============================] - 707s 1s/step - loss: 1.2663 - acc: 0.5119 - val_loss: 1.1439 - val_acc: 0.5875
+Epoch 32/40
+500/500 [==============================] - 707s 1s/step - loss: 1.2551 - acc: 0.5184 - val_loss: 1.1409 - val_acc: 0.5925
+Epoch 33/40
+500/500 [==============================] - 709s 1s/step - loss: 1.2493 - acc: 0.5208 - val_loss: 1.1349 - val_acc: 0.5875
+Epoch 34/40
+500/500 [==============================] - 706s 1s/step - loss: 1.2544 - acc: 0.5159 - val_loss: 1.1328 - val_acc: 0.5925
+Epoch 35/40
+500/500 [==============================] - 751s 2s/step - loss: 1.2376 - acc: 0.5282 - val_loss: 1.1264 - val_acc: 0.5950
+Epoch 36/40
+500/500 [==============================] - 718s 1s/step - loss: 1.2460 - acc: 0.5200 - val_loss: 1.1255 - val_acc: 0.5975
+Epoch 37/40
+500/500 [==============================] - 716s 1s/step - loss: 1.2632 - acc: 0.5116 - val_loss: 1.1239 - val_acc: 0.5850
+Epoch 38/40
+500/500 [==============================] - 716s 1s/step - loss: 1.2235 - acc: 0.5317 - val_loss: 1.1246 - val_acc: 0.5900
+Epoch 39/40
+500/500 [==============================] - 710s 1s/step - loss: 1.2536 - acc: 0.5162 - val_loss: 1.1278 - val_acc: 0.5850
+Epoch 40/40
+500/500 [==============================] - 704s 1s/step - loss: 1.2540 - acc: 0.5208 - val_loss: 1.1331 - val_acc: 0.5750
