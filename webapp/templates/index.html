@@ -33,18 +33,13 @@
 
 			    $("#btnSubmit").click(function (event) {
 
-			        //stop submit the form, we will post it manually.
 			        event.preventDefault();
+
 			        var displayResources = $('#display-resources');
-			        // Get form
+
 			        var form = $('#fileUploadForm')[0];
 
-					// Create an FormData object 
 			        var data = new FormData(form);
-
-
-					// disabled the submit button
-			        $("#btnSubmit").prop("disabled", true);
 
 			        $.ajax({
 			            type: "POST",
@@ -57,22 +52,23 @@
 			            timeout: 600000,
 			            timeout: 600000,
 			            success: function (data) {
-			            	var output="<table><thead><tr><th>Face</th><th>Emotion</th></thead><tbody>";
-			            	// var response = JSON.parse(data.items);
-			           		for (var i in data.items) {
-			           			output+="<tr><td><img src='/static/images/" + data.items[i].filepath +"' width=150 height=150/></td><td>" + data.items[i].emotion + "</td></tr>";
-
-			           		}
+			            	if (data.items.length > 0) { 
+			            		var output="<table><thead><tr><th>Face</th><th>Emotion</th></thead><tbody>";
+			            		// var response = JSON.parse(data.items);
+			           			for (var i in data.items) {
+			           				output+="<tr><td><img src='/static/images/" + data.items[i].filepath +"' width=150 height=150/></td><td>" + data.items[i].emotion + "</td></tr>";
+			           			}
 			           		output+="</tbody></table>";
 							displayResources.html(output);
 							$("table").addClass("table");
+							} else {
+								alert("No faces are detected in your file.");
+							}
 
 			             },
 			            error: function (e) {
 
 			                alert("unsuccessful1");
-			                $("#btnSubmit").prop("disabled", false);
-
 			            }
 			        });
 
