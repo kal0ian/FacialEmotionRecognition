@@ -7,9 +7,9 @@ from keras.models import model_from_json
 import base64
 
 
-UPLOAD_FOLDER = 'E:\\FacialExpressionRecognition\\facial_emotion_recognition\\webapp\\static\\images\\'
+UPLOAD_FOLDER = 'static\\images\\'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'bmp'])
-PATH_TO_MODEL = 'E:\\FacialExpressionRecognition\\facial_emotion_recognition\\trained_models\\best_40epochs'
+PATH_TO_MODEL = '..\\trained_models\\best_40epochs'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -28,12 +28,26 @@ def upload_file():
    		f = request.files['file']
    		if f and allowed_file(f.filename):
    			full_filepath = os.path.join(app.config['UPLOAD_FOLDER'], f.filename)
-   			# f.save(full_filepath)
+   			f.save(full_filepath)
    			image = cv2.imread(full_filepath)
+   			gray_image = cv2.imread(full_filepath, 0)
    			model = load_model(PATH_TO_MODEL)
-   			return jsonify(items=classify_uploded_image(model, image))
+   			return jsonify(items=classify_uploded_image(model, image, gray_image))
    		else:
    			return jsonify(items=[])
+
+
+@app.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
 
 
 def load_model(filename, verbose=False):
@@ -47,10 +61,8 @@ def load_model(filename, verbose=False):
     return loaded_model
 
 
-def classify_uploded_image(model, image):
+def classify_uploded_image(model, image, gray_image):
     lables = ["Angry", "Disgust", "Fear", "Happy", "Sad", "Surprise", "Neutral"]
-    image_copy = np.copy(image)
-    gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     faceCascade = cv2.CascadeClassifier("static/classifier/haarcascade_frontalface_default.xml")
     faces = faceCascade.detectMultiScale(
         gray_image,
@@ -62,7 +74,7 @@ def classify_uploded_image(model, image):
     print("Number of faces: " + str(len(faces)))
     for f in faces:
         x, y, w, h = [ v for v in f ]
-        cv2.rectangle(image_copy, (x,y), (x+w, y+h), (255,0,0), 3)
+        cv2.rectangle(image, (x,y), (x+w, y+h), (255,0,0), 3)
         face_crop.append(gray_image[y:y+h, x:x+w])
     index = 0
     items = []
@@ -72,8 +84,6 @@ def classify_uploded_image(model, image):
         resized_face = resized_face.reshape(1,48,48,1)
         prediction = model.predict(resized_face)
 
-        cv2.imshow('face', face)
-        cv2.waitKey(0)
         filename = 'face'+str(index)+'.png'
         cv2.imwrite(os.path.join(app.config['UPLOAD_FOLDER'], filename), face)
         answer = dict(filepath=filename, emotion=lables[np.argmax(prediction[0])])
@@ -87,4 +97,4 @@ def save_prediction(index, face, prediction):
 
 
 if __name__ == '__main__':
-   app.run(debug = True)
+   app.run(debug = True, threaded=False)
