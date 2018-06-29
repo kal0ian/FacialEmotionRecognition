@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		
+		<link href="{{ url_for('static',filename='styles/bootstrap.min.css')}}" rel="stylesheet">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script type="text/javascript" src="{{ url_for('static',filename='js/bootstrap.min.js')}}"></script>
+		<script type="text/javascript" src="{{ url_for('static',filename='js/bootstrap-filestyle.js')}}"></script>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css')}}">
+	</head>
+
+	<body>
+	<div class="container" style="margin-top: 20px;margin-bottom: 30px">
+		<img src="/static/images/logo.png" /><br/><br/>
+			<div class="row">
+				<div class="span12">
+					<form id="fileUploadForm" method="post" enctype="multipart/form-data">
+						<input type="file" id="file" name="file" class="filestyle">	<br/>	
+						<input id="btnSubmit" class="btn btn-info" type="submit" />	
+					</form>
+					<div id="display-resources"></div>
+				</div>
+			</div>
+		</div>
+
+		<script>	
+			$(document).ready(function () {
+
+			    $("#btnSubmit").click(function (event) {
+
+			        event.preventDefault();
+
+			        var displayResources = $('#display-resources');
+
+			        var form = $('#fileUploadForm')[0];
+
+			        var data = new FormData(form);
+
+			        $.ajax({
+			            type: "POST",
+			            enctype: 'multipart/form-data',
+			            url: "/upload",
+			            data: data,
+			            processData: false,
+			            contentType: false,
+			            cache: false,
+			            timeout: 600000,
+			            timeout: 600000,
+			            success: function (data) {
+			            	if (data.items.length > 0) { 
+			            		var output="<table><thead><tr><th>Face</th><th>Emotion</th></thead><tbody>";
+			            		// var response = JSON.parse(data.items);
+			           			for (var i in data.items) {
+			           				output+="<tr><td><img src='/static/images/" + data.items[i].filepath +"' width=150 height=150/></td><td>" + data.items[i].emotion + "</td></tr>";
+			           			}
+			           		output+="</tbody></table>";
+							displayResources.html(output);
+							$("table").addClass("table");
+							} else {
+								alert("No faces are detected in your file.");
+							}
+
+			             },
+			            error: function (e) {
+
+			                alert("unsuccessful1");
+			            }
+			        });
+
+
+			    });
+
+			});
+		</script>
+	</body>
+</html>
